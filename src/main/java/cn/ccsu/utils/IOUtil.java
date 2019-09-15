@@ -1,9 +1,8 @@
 package cn.ccsu.utils;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import org.junit.Test;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +16,18 @@ import java.util.List;
  */
 public class IOUtil
 {
-    public static List<String> readFileToList(String filePath,boolean isCalsspath,String charSet) throws Exception
+    /**
+     *
+     * @param filePath 文件路径
+     * @param isClasspath 是不是类路径下，是的就为true，否就为false
+     * @param charSet 文件的编码
+     * @return 读取的配置文件
+     * @throws Exception
+     */
+    public static List<String> readFileToList(String filePath,boolean isClasspath,String charSet) throws Exception
     {
         InputStream is = null;
-        if (isCalsspath)
+        if (isClasspath)
         {
             is = ReadConfigUtil.class.getClassLoader().getResourceAsStream(filePath);
         }
@@ -28,7 +35,6 @@ public class IOUtil
         {
             is = new FileInputStream(filePath);
         }
-
         InputStreamReader isr = new InputStreamReader(is,charSet);
         BufferedReader br = new BufferedReader(isr);
         String line = null;
@@ -39,5 +45,17 @@ public class IOUtil
         }
         br.close();
         return lineList;
+    }
+    @Test
+    public void testreadFileToList()
+    {
+        try {
+            List<String> strings = IOUtil.readFileToList("seeds.txt", false, StaticValue.defaultEncoding);
+            for (String string : strings) {
+                System.out.println(string);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

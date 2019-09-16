@@ -1,10 +1,16 @@
 package cn.ccsu.utils;
 
 import cn.ccsu.iface.download.DownloadInterface;
+import jdk.nashorn.internal.ir.IfNode;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,21 +42,36 @@ public class WebpageDownloadUtilForUrlConnection implements DownloadInterface
      */
     public static String download(String url) throws Exception
     {
-        String charset = WebCharsetDetectorUtil.Getcharset(url);
-        BufferedReader br = IOUtil.getBufferedReader(url, charset);
-        String line = null;
-        int lineCounter = 0;
-        StringBuilder stringBuilder = new StringBuilder();
-        while ((line = br.readLine())!=null)
+        //1 最终编码html源码变量
+        String htmlSource = null;
+        String findCharset = null;
+        //2 获取URLConnection对象
+        URLConnection urlConnection = IOUtil.getUrlConnection(url);
+        //3 将流转换成字节数组
+        byte[] contentByteArray = IOUtil.convertInputStreamToByteArray(urlConnection.getInputStream());
+        //4 从http header 获取编码 如果拿到则为最终网页编码
+        findCharset =WebCharsetDetectorUtil.GetcharsetByHttpHeader(urlConnection);
+        //5 编码逻辑
+        if(findCharset == null)//如果header没有找到，就去网页中找网页编码
         {
-            if (lineCounter > 0)
+            htmlSource = new String(contentByteArray,StaticValue.defaultEncoding);//先用默认UTF-8读取网页，不管他乱不乱码
+
+            findCharset = WebCharsetDetectorUtil.getCharsetByHttpSource(htmlSource);//找到网站编码
+
+            if (findCharset.equalsIgnoreCase(StaticValue.defaultEncoding) || findCharset == null)//如果网站的编码与默认的编码UTF-8相同或者没有找到网站编码    就不用转换
             {
-                stringBuilder.append(StaticValue.sep_next_line);
+
             }
-            stringBuilder.append(line);
+            else//如果网站的编码与默认的编码UTF-8不相同,就要用找出来的网站编码重新转换一次
+            {
+                htmlSource = new String(contentByteArray,findCharset);
+            }
         }
-        br.close();
-        return  stringBuilder.toString();
+        else//如果header找到了网页编码
+        {
+            htmlSource = new String(contentByteArray,findCharset);
+        }
+        return htmlSource;
     }
 
     @Test

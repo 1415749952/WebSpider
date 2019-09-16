@@ -4,6 +4,7 @@ import jdk.internal.util.xml.impl.Input;
 import org.junit.Test;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -92,6 +93,23 @@ public class IOUtil
             bos.write(byteBuffer,0,readlenth);
         }
         return bos.toByteArray();
+    }
+
+    public static URLConnection getUrlConnection(String url)
+    {
+        URL urlObj = null;
+        try {
+            urlObj = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        URLConnection urlConnection = null;
+        try {
+            urlConnection = urlObj.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return urlConnection;
     }
 
 

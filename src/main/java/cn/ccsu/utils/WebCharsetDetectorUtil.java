@@ -26,21 +26,48 @@ public class WebCharsetDetectorUtil
 {
     public static String meta_charset_regex = "charset=[\"]?([\\s\\S]*?)[\">]";
 
-
     /**
-     * 获取网页编码
-     * @param url 网页的url
-     * @return 网页编码
+     * 在网页中找到网页编码
+     * @param htmlSource
+     * @return
      * @throws IOException
      */
-    public static String Getcharset(String url) throws IOException
-    {
+    public static String getCharsetByHttpSource(String htmlSource) throws IOException {
         String findCharset = null;
-        URL urlObj = new URL(url);
-        URLConnection urlConnection = urlObj.openConnection();
+        StringReader sr = new StringReader(htmlSource);
+        BufferedReader br = new BufferedReader(sr);
+        String line = null;
+        while ((line = br.readLine()) != null)
+        {
+            line = line.trim().toLowerCase();
+            if (line.contains("<meta"))
+            {
+                findCharset = RegexUtil.getMatchText(line,WebCharsetDetectorUtil.meta_charset_regex,1);
+                if (findCharset != null)
+                {
+                    break;
+                }
+            }
+            else if (line.contains("</head>"))
+            {//到了</head>还没有找到就直接跳出循环，不在找了。
+                break;
+            }
+        }
+        br.close();
+        return findCharset;
+    }
+
+    /**
+     * 获取http header中的网页编码
+     * @param urlConnection
+     * @return
+     */
+    public static String GetcharsetByHttpHeader(URLConnection urlConnection)
+    {
         Map<String, List<String>> headerMap = urlConnection.getHeaderFields();
         Set<String> keySet = headerMap.keySet();
         List<String> valueList = null;
+        String findCharset = null;
         for (String key : keySet)
         {
             if (key!=null && key.equalsIgnoreCase("Content-Type"))//Content-Type
@@ -60,6 +87,26 @@ public class WebCharsetDetectorUtil
                 findCharset = valueArray[1];
             }
         }
+        return findCharset;
+    }
+
+
+
+    /**
+     * 获取网页编码
+     * @param url 网页的url
+     * @return 网页编码
+     * @throws IOException
+     */
+    public static String Getcharset(String url) throws IOException
+    {
+        String findCharset = null;
+        URL urlObj = new URL(url);
+        URLConnection urlConnection = urlObj.openConnection();
+
+
+        findCharset = GetcharsetByHttpHeader(urlConnection);//从header中找网页编码
+
         if (findCharset == null)//如果在header中找不到，就去页面上面找
         {
             BufferedReader br = IOUtil.getBufferedReader(urlConnection,StaticValue.defaultEncoding);

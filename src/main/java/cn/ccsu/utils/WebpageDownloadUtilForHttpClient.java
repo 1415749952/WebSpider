@@ -65,10 +65,10 @@ public class WebpageDownloadUtilForHttpClient implements DownloadInterface
     @Test
     public void testdownloadHtml()
     {
-        String url = "https://www.baidu.com";
+        //String url = "https://www.baidu.com";
         //String url = "http://www.xbiquge.la/";
         //String url = "https://www.qq.com";
-        //String url = "http://news.youth.cn/gn/";
+        String url = "http://news.youth.cn/gn/";
         //String url = "http://news.youth.cn/";
         //String url = "https://bbs.csdn.net/topics/370024556";
         //String url ="https://www.52pojie.cn/";
@@ -88,33 +88,20 @@ public class WebpageDownloadUtilForHttpClient implements DownloadInterface
 
     public static String parseEntity(HttpEntity httpEntity) throws IOException
     {
+        //1 最终编码html源码变量
         String findCharset  = null;
         String htmlSource = null;
-        //因为不管哪个编码，这个字节数组均要形成，故直接先转成字节数组
+        //2 因为不管哪个编码，这个字节数组均要形成，故直接先转成字节数组
         byte[] contentByteArray = IOUtil.convertInputStreamToByteArray(httpEntity.getContent());
+        //3 从http header 获取编码 如果拿到则为最终网页编码
         findCharset = EntityUtils.getContentCharSet(httpEntity);
-        if (findCharset == null)//在responseheader中没有找到
+        //4 编码逻辑
+        if (findCharset == null)//在header中没有找到
         {
-            htmlSource = new String(contentByteArray,StaticValue.defaultEncoding);//先用默认UTF-8，找到网站编码
-            StringReader sr = new StringReader(htmlSource);
-            BufferedReader br = new BufferedReader(sr);
-            String linee = null;
-            while ((linee = br.readLine()) != null)
-            {
-                linee = linee.trim().toLowerCase();
-                if (linee.contains("<meta"))
-                {
-                    findCharset = RegexUtil.getMatchText(linee,WebCharsetDetectorUtil.meta_charset_regex,1);
-                    if (findCharset != null)
-                    {
-                        break;
-                    }
-                }
-                else if (linee.contains("</head>"))
-                {//到了</head>还没有找到就直接跳出循环，不在找了。
-                    break;
-                }
-            }
+            htmlSource = new String(contentByteArray,StaticValue.defaultEncoding);//先用默认UTF-8读取网页，不管他乱不乱码
+
+            findCharset = WebCharsetDetectorUtil.getCharsetByHttpSource(htmlSource);//找到网站编码
+
             if (findCharset.equalsIgnoreCase(StaticValue.defaultEncoding) || findCharset == null)//如果网站的编码与默认的编码UTF-8相同或者没有找到网站编码    就不用转换
             {
 
@@ -123,7 +110,6 @@ public class WebpageDownloadUtilForHttpClient implements DownloadInterface
             {
                 htmlSource = new String(contentByteArray,findCharset);
             }
-            br.close();
         }
         else//在responseheader中找到了
         {
@@ -131,10 +117,5 @@ public class WebpageDownloadUtilForHttpClient implements DownloadInterface
         }
         return htmlSource;
     }
-
-
-
-
-
 
 }

@@ -1,8 +1,11 @@
 package cn.ccsu.utils;
 
+import jdk.internal.util.xml.impl.Input;
 import org.junit.Test;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,4 +61,38 @@ public class IOUtil
             e.printStackTrace();
         }
     }
+
+    public static BufferedReader getBufferedReader(URLConnection urlConnection,String charset) throws IOException
+    {
+        InputStream is = urlConnection.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is, charset);
+        BufferedReader br = new BufferedReader(isr);
+        return br;
+    }
+    public static BufferedReader getBufferedReader(String url,String charset) throws IOException
+    {
+        URL urlObj = new URL(url);
+        URLConnection urlConnection = urlObj.openConnection();
+        return getBufferedReader(urlConnection,charset);
+    }
+
+    /**
+     * 将字节输入流转变成字节数字
+     * @param inputStream 自己输入流
+     * @return 字节数组
+     * @throws IOException
+     */
+    public static byte[] convertInputStreamToByteArray(InputStream inputStream) throws IOException
+    {
+        byte[] byteBuffer = new byte[1024*4];
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int readlenth = 0;
+        while ((readlenth = inputStream.read(byteBuffer)) != -1)
+        {
+            bos.write(byteBuffer,0,readlenth);
+        }
+        return bos.toByteArray();
+    }
+
+
 }

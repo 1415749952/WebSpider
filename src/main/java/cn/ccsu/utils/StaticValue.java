@@ -16,4 +16,10 @@ public class StaticValue
     public static String rootTitle="中国青年网-国内新闻";
     //默认读取文件的编码设置
     public static String defaultEncoding = "UTF-8";
+    //分隔符号静态设置
+    public static String sep_next_line = "\n";
+    //分号静态设置
+    public static String sep_semicolon = ";";
+    //等号静态设置
+    public static String sep_equal = "=";
 }

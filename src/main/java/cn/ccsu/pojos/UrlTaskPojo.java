@@ -2,7 +2,7 @@ package cn.ccsu.pojos;
 
 /**
  * Created with IntelliJ IDEA.
- * Description:对url任务的封装类
+ * Description:对url任务的封装类，UrlTaskPojo实体类
  *
  * @author: TheFei
  * @Date: 2019-09-14

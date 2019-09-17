@@ -1,6 +1,7 @@
 package cn.ccsu.utils;
 
 import jdk.internal.util.xml.impl.Input;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.io.*;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 public class IOUtil
 {
+    private static Logger logger = Logger.getLogger(IOUtil.class);
     /**
      *
      * @param filePath 文件路径
@@ -48,6 +50,7 @@ public class IOUtil
             lineList.add(line);
         }
         br.close();
+        logger.info("配置文件"+filePath+"读取成功");
         return lineList;
     }
     @Test

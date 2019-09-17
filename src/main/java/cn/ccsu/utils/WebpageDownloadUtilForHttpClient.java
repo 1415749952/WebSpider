@@ -7,6 +7,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -21,41 +22,59 @@ import java.io.IOException;
  */
 public class WebpageDownloadUtilForHttpClient implements WebpageDownloadInterface
 {
+    Logger logger = Logger.getLogger(WebpageDownloadUtilForHttpClient.class);
+
     @Override
     public String downloadHtml(String url)
     {
-        String downloadHtml = null;
-        try {
-            downloadHtml = download(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return downloadHtml;
+        return this.download(url);
     }
 
-    public static String download(String url) throws IOException
+    private String download(String url)
     {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         String htmlSource = null;
         try
         {
             HttpGet httpGet = new HttpGet(url);
-            CloseableHttpResponse response = httpclient.execute(httpGet);
+            CloseableHttpResponse response = null;
+            try {
+                response = httpclient.execute(httpGet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             if (response.getStatusLine().getStatusCode() == 200)//http状态码为200
             {
                 try
                 {
                     HttpEntity entity = response.getEntity();
-                    htmlSource = parseEntity(entity);
-                    EntityUtils.consume(entity);
+                    try {
+                        htmlSource = this.parseEntity(entity);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        EntityUtils.consume(entity);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }finally
                 {
-                    response.close();
+                    try {
+                        response.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+                //logger.info("");
             }
         }finally
         {
-            httpclient.close();
+            try {
+                httpclient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return htmlSource;
@@ -74,17 +93,12 @@ public class WebpageDownloadUtilForHttpClient implements WebpageDownloadInterfac
         //String url ="https://www.hanfan.cc/tag/jungle/";
         // String url ="https://www.hanfan.cc/35590.html";
 
-        String html = null;
-        //String url ="https://www.bilibili.com/";
-        try {
-            html = WebpageDownloadUtilForHttpClient.download(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String html  = new  WebpageDownloadUtilForHttpClient().downloadHtml(url);
         System.out.println(html);
+
     }
 
-    public static String parseEntity(HttpEntity httpEntity) throws IOException
+    private String parseEntity(HttpEntity httpEntity) throws IOException
     {
         //1 最终编码html源码变量
         String findCharset  = null;
@@ -115,5 +129,6 @@ public class WebpageDownloadUtilForHttpClient implements WebpageDownloadInterfac
         }
         return htmlSource;
     }
+
 
 }

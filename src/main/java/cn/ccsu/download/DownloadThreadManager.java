@@ -1,8 +1,10 @@
 package cn.ccsu.download;
 
 import cn.ccsu.iface.ThreadManager;
+import cn.ccsu.pojos.UrlTaskPojo;
 import cn.ccsu.schedule.TaskScheduleManager;
 import cn.ccsu.ui.UIManager;
+import cn.ccsu.utils.StaticValue;
 import com.sun.org.apache.xml.internal.security.Init;
 
 import java.util.ArrayList;
@@ -123,8 +125,28 @@ public class DownloadThreadManager implements ThreadManager
 
     public static void main(String[] args)
     {
-        new UIManager().addSeedUrlsToTaskSchedule();
+        //new UIManager().addSeedUrlsToTaskSchedule();
+        //UrlTaskPojo todo = new UIManager().getRootUrlByStaticValue();
+
+        new UIManager().addUrlsToTaskSchedule(StaticValue.rootUrlFilePath);//
+
+        new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("csdn","https://bbs.csdn.net/topics/370024556"));
+        new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("52pojie","https://www.52pojie.cn/"));
+
+
+        //String url = "https://bbs.csdn.net/topics/370024556";
+        //String url ="https://www.52pojie.cn/";
+        //String url ="https://www.xl720.com/";
+
         DownloadThreadManager.getDownloadThreadManager().createThread(2);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("xl720","https://www.xl720.com/"));
+
     }
 
 

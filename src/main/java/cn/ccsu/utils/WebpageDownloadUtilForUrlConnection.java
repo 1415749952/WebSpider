@@ -33,7 +33,7 @@ public class WebpageDownloadUtilForUrlConnection implements WebpageDownloadInter
      * @return 该网址的内容
      * @throws Exception
      */
-    public static String download(String url) throws Exception
+    private String download(String url) throws Exception
     {
         //1 最终编码html源码变量
         String htmlSource = null;
@@ -70,9 +70,10 @@ public class WebpageDownloadUtilForUrlConnection implements WebpageDownloadInter
     @Test
     public void testDownloadHtml() throws Exception
     {
-        String url = "https://www.baidu.com";
+        //String url = "https://www.baidu.com";
         //String url = "http://www.xbiquge.la/";
-        //String url = "https://www.qq.com";
+        String url = "https://www.qq.com";
+        //://www.qq.com
         //String url = "http://news.youth.cn/gn/";
         //String url = "http://news.youth.cn/";
         //String url = "https://bbs.csdn.net/topics/370024556";
@@ -80,7 +81,7 @@ public class WebpageDownloadUtilForUrlConnection implements WebpageDownloadInter
         //String url ="https://www.xl720.com/";
         //String url ="https://www.bilibili.com/";
         //String url ="https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=%E7%AC%94%E8%B6%A3%E9%98%81&rsv_pq=be5cb5e600070dbf&rsv_t=8222E4EihFB1uz8ApjHNRcoZBjb8vwvz3yZJnDQ1tHUEs%2FgDCoTDU2owzfc&rqlang=cn&rsv_enter=1&rsv_dl=tb&rsv_sug3=10&rsv_sug1=9&rsv_sug7=101&rsv_sug2=0&inputT=4577&rsv_sug4=5234";
-        String downloadHtml = WebpageDownloadUtilForUrlConnection.download(url);
+        String downloadHtml = new  WebpageDownloadUtilForUrlConnection().downloadHtml(url);
         System.out.println(downloadHtml);
     }
 

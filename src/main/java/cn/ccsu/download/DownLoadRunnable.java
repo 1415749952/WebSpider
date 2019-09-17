@@ -6,6 +6,7 @@ import cn.ccsu.pojos.UrlTaskPojo;
 import cn.ccsu.schedule.TaskScheduleManager;
 import cn.ccsu.ui.UIManager;
 import cn.ccsu.utils.WebpageDownloadUtilForHttpClient;
+import cn.ccsu.utils.WebpageDownloadUtilForUrlConnection;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
@@ -54,8 +55,8 @@ public class DownLoadRunnable implements Runnable
     {
         while (enableRunningFllag)
         {
-            //WebpageDownloadInterface download = new WebpageDownloadUtilForHttpClient();
-            WebpageDownloadInterface download = new WebpageDownloadUtilForHttpClient();
+            //WebpageDownloadInterface download = new WebpageDownloadUtilForUrlConnection();//使用UrlConnection下载网页内容
+            WebpageDownloadInterface download = new WebpageDownloadUtilForHttpClient();//使用HttpClient下载网页内容
 
             LinkedList<UrlTaskPojo> todoTaskPojoList = TaskScheduleManager.getTaskScheduleManager().getTodoTaskPojoList();
             //打印任务调度器中所有要下载的任务
@@ -73,7 +74,7 @@ public class DownLoadRunnable implements Runnable
                     //logger.info(downloadHtmlSource);
                     //进入解析环节
 
-                    logger.info(this.name+"下载成功****"+tackPojo.getUrl());//将进入解析环节
+                    logger.info(this.name+"下载成功将进入解析环节****"+tackPojo.getUrl());//进入解析环节
                 }
                 else
                 {
@@ -98,7 +99,7 @@ public class DownLoadRunnable implements Runnable
     }
     
     
-    public static void main(String[] args)
+   /* public static void main(String[] args)
     {
         new UIManager().addSeedUrlsToTaskSchedule();//将任务添加到生产者消费者模式的池子（TaskScheduleManager）中
         DownLoadRunnable downLoadRunnable1 = new DownLoadRunnable("Runnable--1");
@@ -108,7 +109,7 @@ public class DownLoadRunnable implements Runnable
         thread.start();
         thread1.start();
     }
-    
+    */
     
     
     

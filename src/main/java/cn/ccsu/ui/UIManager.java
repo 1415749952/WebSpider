@@ -4,6 +4,7 @@ import cn.ccsu.pojos.UrlTaskPojo;
 import cn.ccsu.schedule.TaskScheduleManager;
 import cn.ccsu.utils.IOUtil;
 import cn.ccsu.utils.StaticValue;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,6 +21,17 @@ import java.util.List;
  */
 public class UIManager
 {
+    private Logger logger = Logger.getLogger(UIManager.class);
+    /**
+     * 获取种子任务通过传入UrlTaskPojo类的对象
+     * @param urlTaskPojo
+     * @return
+     */
+    public UrlTaskPojo getRootUrlByUrlTaskPojo(UrlTaskPojo urlTaskPojo)
+    {
+        return urlTaskPojo;
+    }
+
     public UrlTaskPojo getRootUrlByDirect()
     {
         return new UrlTaskPojo("中国青年网-国内新闻","http://news.youth.cn/gn/");
@@ -36,7 +48,7 @@ public class UIManager
      * @param isClasspath 数据文件的路径是不是类路径,是的话为true，不是的话为false
      * @return List<UrlTaskPojo>，UrlTaskPojo集合
      */
-    public List<UrlTaskPojo> getRootUrlBySeedFile(String dataFilePath,boolean isClasspath)
+    private List<UrlTaskPojo> getRootUrlBySeedFile(String dataFilePath,boolean isClasspath)
     {
         List<String> lineList = new ArrayList<>();
         List<UrlTaskPojo> resultTaskPojo = new ArrayList<>();
@@ -67,6 +79,7 @@ public class UIManager
             }
 
         }
+        logger.info("配置文件"+dataFilePath+"解析成功");
         return resultTaskPojo;
     }
     @Test
@@ -80,22 +93,56 @@ public class UIManager
     }
 
     /**
-     * 将从seeds.txt数据文件中读取出来的List<UrlTaskPojo> seedUrlPojoList数据添加到任务调度器中
+     * 将UrlTaskPojo数据添加到任务调度器中
+     * @param dataFilePath 存储UrlTaskPojo对象的文件路径，如"seeds.txt"。。。通过配置文件来读取UrlTaskPojo数据并将其添加到任务调度器中
      * @return
      */
-    public boolean addSeedUrlsToTaskSchedule()
+    public boolean addUrlsToTaskSchedule(String dataFilePath)
     {
-        List<UrlTaskPojo> seedUrlPojoList = this.getRootUrlBySeedFile("seeds.txt",false);
+        List<UrlTaskPojo> seedUrlPojoList = this.getRootUrlBySeedFile(dataFilePath,false);
         TaskScheduleManager taskScheduleManager = TaskScheduleManager.getTaskScheduleManager();
         boolean b = taskScheduleManager.addUrlTaskPojoList(seedUrlPojoList);
-        System.out.println("种子任务已经添加到任务调度管理器（TaskScheduleManager）中");
+        logger.info("种子任务通过读取"+dataFilePath+"配置文件。已经添加到任务调度管理器（TaskScheduleManager）中");
         return b;
     }
+
+    /**
+     * 将UrlTaskPojo数据添加到任务调度器中
+     * @param urlTaskPojo  种子任务通过传入UrlTaskPojo对象，将其添加到任务调度器中。
+     * @return
+     */
+    public boolean addUrlsToTaskSchedule(UrlTaskPojo urlTaskPojo)
+    {
+        TaskScheduleManager taskScheduleManager = TaskScheduleManager.getTaskScheduleManager();
+        boolean b = taskScheduleManager.addOneUrlTaskPojo(urlTaskPojo);
+        logger.info("种子任务通过传入UrlTaskPojo对象。已经添加到任务调度管理器（TaskScheduleManager）中");
+        return b;
+    }
+
+    /**
+     * 将UrlTaskPojo数据添加到任务调度器中
+     * @param urlTaskPojoList 种子任务通过传入UrlTaskPojo对象集合，将其添加到任务调度器中。
+     * @return
+     */
+    public boolean addUrlsToTaskSchedule(List<UrlTaskPojo> urlTaskPojoList)
+    {
+        TaskScheduleManager taskScheduleManager = TaskScheduleManager.getTaskScheduleManager();
+        boolean b = taskScheduleManager.addUrlTaskPojoList(urlTaskPojoList);
+        logger.info("种子任务通过传入UrlTaskPojo对象集合。已经添加到任务调度管理器（TaskScheduleManager）中");
+        return b;
+    }
+
+
+
+
+
+
+
     @Test
     public void testaddSeedUrlsToTaskSchedule()
     {
         UIManager s = new UIManager();
-        s.addSeedUrlsToTaskSchedule();
+        s.addUrlsToTaskSchedule(StaticValue.rootUrlFilePath);
         TaskScheduleManager taskScheduleManager = TaskScheduleManager.getTaskScheduleManager();
         LinkedList<UrlTaskPojo> todoTaskPojoList = taskScheduleManager.getTodoTaskPojoList();
 

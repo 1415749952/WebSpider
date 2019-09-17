@@ -1,16 +1,9 @@
 package cn.ccsu.utils;
 
-import cn.ccsu.iface.download.DownloadInterface;
-import jdk.nashorn.internal.ir.IfNode;
+import cn.ccsu.iface.WebpageDownloadInterface;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.net.URLConnection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +13,7 @@ import java.util.Set;
  * @Date: 2019-09-15
  * @Time: 10:42
  */
-public class WebpageDownloadUtilForUrlConnection implements DownloadInterface
+public class WebpageDownloadUtilForUrlConnection implements WebpageDownloadInterface
 {
     @Override
     public String downloadHtml(String url)

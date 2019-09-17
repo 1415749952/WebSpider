@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
- * Description: 任务调度器(单例的)，负责任务的调度，决定什么任务先被采集，什么任务后被采集
+ * Description: 任务调度器(单例的)，负责任务的调度，决定什么任务先被采集，什么任务后被采集（生产者消费者模式的池子）
  *
  * @author: TheFei
  * @Date: 2019-09-14
@@ -21,20 +21,6 @@ public class TaskScheduleManager
 
 
     private TaskScheduleManager() {
-    }
-    public static synchronized TaskScheduleManager getTaskScheduleManager()
-    {
-        if (taskScheduleManager == null)
-        {
-            synchronized (TaskScheduleManager.class)
-            {
-                if (taskScheduleManager == null)
-                {
-                    taskScheduleManager = new TaskScheduleManager();
-                }
-            }
-        }
-        return taskScheduleManager;
     }
 
     public LinkedList<UrlTaskPojo> getTodoTaskPojoList() {
@@ -52,6 +38,24 @@ public class TaskScheduleManager
     public void setDoneTaskPojoList(LinkedList<UrlTaskPojo> doneTaskPojoList) {
         this.doneTaskPojoList = doneTaskPojoList;
     }
+
+
+    public static synchronized TaskScheduleManager getTaskScheduleManager()
+    {
+        if (taskScheduleManager == null)
+        {
+            synchronized (TaskScheduleManager.class)
+            {
+                if (taskScheduleManager == null)
+                {
+                    taskScheduleManager = new TaskScheduleManager();
+                }
+            }
+        }
+        return taskScheduleManager;
+    }
+
+
 
     /**
      * 添加待采集的Url,以List<UrlTaskPojo> todoAddTaskList集合的形式添加

@@ -1,4 +1,4 @@
-package cn.ccsu.iface.download;
+package cn.ccsu.iface;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,7 +8,7 @@ package cn.ccsu.iface.download;
  * @Date: 2019-09-16
  * @Time: 18:28
  */
-public interface DownloadInterface
+public interface WebpageDownloadInterface
 {
     public String downloadHtml(String url);
 }

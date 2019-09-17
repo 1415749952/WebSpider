@@ -1,6 +1,6 @@
 package cn.ccsu.utils;
 
-import cn.ccsu.iface.download.DownloadInterface;
+import cn.ccsu.iface.WebpageDownloadInterface;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -9,9 +9,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +19,7 @@ import java.io.StringReader;
  * @Date: 2019-09-16
  * @Time: 12:23
  */
-public class WebpageDownloadUtilForHttpClient implements DownloadInterface
+public class WebpageDownloadUtilForHttpClient implements WebpageDownloadInterface
 {
     @Override
     public String downloadHtml(String url)

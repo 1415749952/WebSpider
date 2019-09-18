@@ -5,6 +5,7 @@ import cn.ccsu.pojos.UrlTaskPojo;
 import cn.ccsu.schedule.TaskScheduleManager;
 import cn.ccsu.ui.UIManager;
 import cn.ccsu.utils.StaticValue;
+import cn.ccsu.utils.SystemConfigParas;
 import com.sun.org.apache.xml.internal.security.Init;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
- * Description:网页下载线程管理器，起多少个线程，线程什么时候开启，叫什么名字。
+ * Description:网页下载线程管理器，起多少个线程，线程什么时候开启，叫什么名字。（单例的）
  *
  * @author: TheFei
  * @Date: 2019-09-16
@@ -39,14 +40,6 @@ public class DownloadThreadManager implements ThreadManager
         this.runnableList = runnableList;
     }
 
-    public int getInitConsumerNumber() {
-        return InitConsumerNumber;
-    }
-
-    public void setInitConsumerNumber(int initConsumerNumber) {
-        InitConsumerNumber = initConsumerNumber;
-    }
-
     public static synchronized DownloadThreadManager getDownloadThreadManager()
     {
         if (downloadThreadManager == null)
@@ -63,10 +56,25 @@ public class DownloadThreadManager implements ThreadManager
     }
 
     /**
-     * 创建下载线程
-     * @param consumerNumber 创建下载线程个数
+     * 创建下载线程，从配置文件中读取要创建下载线程的个数
      */
     @Override
+    public void createThread()
+    {
+        InitConsumerNumber= SystemConfigParas.init_consumer_number;
+        for (int i = 1; i <= InitConsumerNumber; i++)
+        {
+            DownLoadRunnable onRunnable = new DownLoadRunnable("download_consumer_"+i);
+            new Thread(threadGroup,onRunnable,"thread_"+i).start();
+            runnableList.add(onRunnable);
+        }
+    }
+
+
+    /**
+     * 创建下载线程，不从配置文件中读取要创建下载线程的个数
+     * @param consumerNumber 创建下载线程个数
+     */
     public void createThread(int consumerNumber)
     {
         InitConsumerNumber=consumerNumber;
@@ -138,7 +146,7 @@ public class DownloadThreadManager implements ThreadManager
         //String url ="https://www.52pojie.cn/";
         //String url ="https://www.xl720.com/";
 
-        DownloadThreadManager.getDownloadThreadManager().createThread(2);
+        DownloadThreadManager.getDownloadThreadManager().createThread();
 
         try {
             Thread.sleep(2000);

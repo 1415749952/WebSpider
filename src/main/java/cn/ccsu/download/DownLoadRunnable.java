@@ -5,6 +5,7 @@ import cn.ccsu.iface.WebpageDownloadInterface;
 import cn.ccsu.pojos.UrlTaskPojo;
 import cn.ccsu.schedule.TaskScheduleManager;
 import cn.ccsu.ui.UIManager;
+import cn.ccsu.utils.SystemConfigParas;
 import cn.ccsu.utils.WebpageDownloadUtilForHttpClient;
 import cn.ccsu.utils.WebpageDownloadUtilForUrlConnection;
 import org.apache.log4j.Logger;
@@ -78,16 +79,16 @@ public class DownLoadRunnable implements Runnable
                 }
                 else
                 {
-                    logger.error(this.name+"下载出错XXXX"+tackPojo.getUrl());
+                    logger.error(this.name+"下载出错-----"+tackPojo.getUrl());
                     TaskScheduleManager.getTaskScheduleManager().addOneUrlTaskPojo(tackPojo);//将任务重新加入到任务调度器中
                     logger.info(this.name+"重新加入到任务调度器中"+tackPojo.getUrl());
                 }
             }
             else
             {
-                logger.info(this.name+"没有带采集的任务，线程将睡眠2秒钟！");
+                logger.info(this.name+"没有带采集的任务，线程将睡眠"+SystemConfigParas.once_sleep_time_for_empty_task/1000+"秒钟！");
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(SystemConfigParas.once_sleep_time_for_empty_task);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

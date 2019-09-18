@@ -1,0 +1,36 @@
+<div class="main_l">
+<!--content start-->
+<div class="rdwz">
+<ul id="sd" class="tj3_1">
+
+<li id="q"><font>2019-09-18 12:57:00</font><a href="//news.youth.cn/gn/201909/t20190918_12071370.htm">【我爱你，中国！】新中国成立70周年 海外学子真情表白祝福祖国</a></li>
+
+<li class="li1"><font>2019-09-18 12:55:00</font><a href="//news.youth.cn/gn/201909/t20190918_12071366.htm">数说新中国丨五种主要粮食产量多年世界第一</a></li>
+
+<li class="li1"><font>2019-09-18 12:54:00</font><a href="//news.youth.cn/gn/201909/t20190918_12071364.htm">70年，伟大的奋斗精神（望海楼・辉煌中国・精神篇②）</a></li>
+
+<li class="li1"><font>2019-09-18 12:52:00</font><a href="//news.youth.cn/gn/201909/t20190918_12071362.htm">人大制度的历史由来和演变，你知道多少？</a></li>
+
+<li><font>2019-09-18 11:42:00</font><a href="//news.youth.cn/gn/201909/t20190918_12071336.htm">“平稳”仍是房地产市场关键词（锐财经）</a></li>
+
+<li><font>2019-09-18 11:40:00</font><a href="//news.youth.cn/gn/201909/t20190918_12071335.htm">人民日报评论部：走出一条适合自己的现代化路径</a></li>
+
+<li><font>2019-09-18 11:39:00</font><a href="//news.youth.cn/gn/201909/t20190918_12071334.htm">科学把握经济高质量发展的内涵、特点和路径</a></li>
+
+<li><font>2019-09-17 04:16:00</font><a href="//news.youth.cn/gn/201909/t20190917_12069983.htm">人民日报：注重上下联动 抓好专项整治</a></li>
+
+</ul>
+
+
+
+String selector = "ul.tj3_1>li";        ul.tj3_1>li         就是class为tj3_1的ul标签下的li标签
+String selector = "#sd>li";             #sd>li              就是id为#sd的标签下的li标签
+String selector = "ul.tj3_1>li.li1";    ul.tj3_1>li.li1     就是class为tj3_1的ul标签下的class为li1的li标签
+
+String selector = "ul.tj3_1>li";
+Elements elementsBySelector = JsoupUtil.getElementsBySelector(htmlSource, selector);
+for (Element element : elementsBySelector) {
+    String time = element.getElementsByTag("font").text();      获取到font标签内的内容:2019-09-18 11:40:00                       <font>2019-09-18 11:40:00</font>
+    String title = element.getElementsByTag("a").text();        获取到a标签内的内容:科学把握经济高质量发展的内涵、特点和路径         <a href="//news.youth.cn/gn/201909/t20190918_12071334.htm">科学把握经济高质量发展的内涵、特点和路径</a>
+    String url = element.getElementsByTag("a").attr("href");    获取到a标签体中的href的内容://news.youth.cn/gn/201909/t20190917_12069983.htm
+}

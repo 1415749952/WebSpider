@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public class NewsItemEntity
 {
+    private int id;
     private String title;
     private String postTimeString;
     private String sourceURL;
@@ -26,14 +27,23 @@ public class NewsItemEntity
 
     public NewsItemEntity(String title, String sourceURL, String postTimeString) {
         this.title = title;
-        this.postTimeString = postTimeString;
         this.sourceURL = sourceURL;
+        this.postTimeString = postTimeString;
+
         this.insertDate = DateUtil.getDate();
-        this.postDateObj = DateUtil.paeserStringToDate(this.postTimeString);
+        this.postDateObj = DateUtil.paeserStringToDate(postTimeString);
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {

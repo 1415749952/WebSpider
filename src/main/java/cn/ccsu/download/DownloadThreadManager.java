@@ -56,26 +56,26 @@ public class DownloadThreadManager implements ThreadManager
     }
 
     /**
-     * 创建下载线程，从配置文件中读取要创建下载线程的个数
+     * 从配置文件中读取要创建下载线程的个数,创建下载线程并且启动线程
      */
     @Override
-    public void createThread()
+    public void startThread()
     {
         InitConsumerNumber= SystemConfigParas.init_consumer_number;
         for (int i = 1; i <= InitConsumerNumber; i++)
         {
             DownLoadRunnable onRunnable = new DownLoadRunnable("download_consumer_"+i);
-            new Thread(threadGroup,onRunnable,"thread_"+i).start();
+            new Thread(threadGroup,onRunnable,"thread_"+i);
             runnableList.add(onRunnable);
         }
     }
 
 
     /**
-     * 创建下载线程，不从配置文件中读取要创建下载线程的个数
+     * 不从配置文件中读取要创建下载线程的个数，自己传入创建下载线程个数，创建下载线程并且启动线程
      * @param consumerNumber 创建下载线程个数
      */
-    public void createThread(int consumerNumber)
+    public void startThread(int consumerNumber)
     {
         InitConsumerNumber=consumerNumber;
         for (int i = 1; i <= InitConsumerNumber; i++)
@@ -138,22 +138,18 @@ public class DownloadThreadManager implements ThreadManager
 
         new UIManager().addUrlsToTaskSchedule(StaticValue.rootUrlFilePath);//
 
-        new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("csdn","https://bbs.csdn.net/topics/370024556"));
-        new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("52pojie","https://www.52pojie.cn/"));
+        //new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("csdn","https://bbs.csdn.net/topics/370024556"));
+        //new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("52pojie","https://www.52pojie.cn/"));
 
 
         //String url = "https://bbs.csdn.net/topics/370024556";
         //String url ="https://www.52pojie.cn/";
         //String url ="https://www.xl720.com/";
 
-        DownloadThreadManager.getDownloadThreadManager().createThread();
+        DownloadThreadManager.getDownloadThreadManager().startThread(3);
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("xl720","https://www.xl720.com/"));
+
+        //new UIManager().addUrlsToTaskSchedule(new UrlTaskPojo("xl720","https://www.xl720.com/"));
 
     }
 

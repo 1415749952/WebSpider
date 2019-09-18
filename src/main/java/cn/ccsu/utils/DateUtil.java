@@ -1,5 +1,7 @@
 package cn.ccsu.utils;
 
+import org.junit.Test;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,18 +28,29 @@ public class DateUtil
     {
         Date datetimeObj = null;
         try {
-            datetimeObj = sdf.parse(dataString);
+            synchronized (sdf)
+            {
+                datetimeObj = sdf.parse(dataString);
+            }
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return datetimeObj;
     }
+    
+    
     public static String paeserDateToString(Date data)
     {
         return sdf.format(data);
     }
 
-
+    @Test
+    public void test()
+    {
+        Date date = paeserStringToDate("2019-04-12 12:54:58");
+        System.out.println(date);
+    }
 
 
 

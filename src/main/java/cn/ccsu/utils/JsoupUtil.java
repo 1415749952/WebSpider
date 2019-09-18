@@ -19,53 +19,15 @@ import java.util.List;
  */
 public class JsoupUtil
 {
-    public static enum ContentSelectType{
-        OUTHER_HTML, HTML, TEXT
-    }
-
     public static Document getDocument(String htmlSource)
     {
         return Jsoup.parse(htmlSource);
     }
-    private static Elements getElementsBySelector(String htmlSource,String selector)
+    public static Elements getElementsBySelector(String htmlSource,String selector)
     {
         Document document = getDocument(htmlSource);
         return document.select(selector);
     }
-
-    public static List<String> getElementsBySelector(String htmlSource, String selector,ContentSelectType contentType)
-    {
-        Elements elementsBySelector = getElementsBySelector(htmlSource, selector);
-
-        List<String> elementList = new ArrayList<>();
-        switch (contentType)
-        {
-            case OUTHER_HTML:
-                for (Element element : elementsBySelector)
-                {
-                    elementList.add(element.outerHtml());
-                }
-                break;
-            case HTML:
-                for (Element element : elementsBySelector)
-                {
-                    elementList.add(element.html());
-                }
-                break;
-            case TEXT:
-                for (Element element : elementsBySelector)
-                {
-                    elementList.add(element.text());
-                }
-                break;
-            default: break;
-        }
-        return elementList;
-    }
-
-
-
-
 
     public static void main(String[] args)
     {

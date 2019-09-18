@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ccsu.persistence.NewsItemEntityDao">
+
+    <insert id="insertNewsItemEntity">
+        insert
+        into t_newsitementity(title, postTimeString, sourceURL, insertDate, postDateObj)
+        value (#{title},#{postTimeString},#{sourceURL},#{insertDate},#{postDateObj})
+    </insert>
+
+</mapper>

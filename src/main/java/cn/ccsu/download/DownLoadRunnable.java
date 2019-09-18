@@ -1,17 +1,26 @@
 package cn.ccsu.download;
 
 
+import cn.ccsu.iface.HtmlParserInterface;
 import cn.ccsu.iface.WebpageDownloadInterface;
+import cn.ccsu.parser.NewsItemParserForJsoup;
+import cn.ccsu.persistence.DB;
+import cn.ccsu.persistence.NewsItemEntityDao;
 import cn.ccsu.pojos.UrlTaskPojo;
+import cn.ccsu.pojos.entity.NewsItemEntity;
 import cn.ccsu.schedule.TaskScheduleManager;
-import cn.ccsu.ui.UIManager;
 import cn.ccsu.utils.SystemConfigParas;
 import cn.ccsu.utils.WebpageDownloadUtilForHttpClient;
-import cn.ccsu.utils.WebpageDownloadUtilForUrlConnection;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.log4j.Logger;
 
-import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -69,13 +78,19 @@ public class DownLoadRunnable implements Runnable
             if (tackPojo!=null)
             {
                 String downloadHtmlSource = download.downloadHtml(tackPojo.getUrl());
+                logger.info(this.name+"进入解析环节****"+tackPojo.getUrl());//进入解析环节
                 if (downloadHtmlSource != null)
                 {
-                    //打印下载下来的数据
-                    //logger.info(downloadHtmlSource);
                     //进入解析环节
+                    HtmlParserInterface<NewsItemEntity> htmlParser = new NewsItemParserForJsoup();//使用Jsoup解析
+                    List<NewsItemEntity> itemEntities = htmlParser.parserHtmlSource(downloadHtmlSource);
 
-                    logger.info(this.name+"下载成功将进入解析环节****"+tackPojo.getUrl());//进入解析环节
+                    for (NewsItemEntity itemEntity : itemEntities) {
+                        //System.out.println(this.name+"////////解析结果"+itemEntity);
+                        DB.inserNewsItemEntitytoDB(itemEntity);//插入数据库
+                    }
+                    logger.info(this.name+"-------一个网页下载完成即将进入下一页");
+
                 }
                 else
                 {

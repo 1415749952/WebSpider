@@ -1,3 +1,7 @@
-中国青年网-国内新闻  http://news.youth.cn/gn/11
-百度      https://www.baidu.com
-qq      https://www.qq.com
+中国青年网-国内新闻  http://news.youth.cn/gn/
+中国青年网-国内新闻1  http://news.youth.cn/gn/index_1.htm
+中国青年网-国内新闻2  http://news.youth.cn/gn/index_2.htm
+中国青年网-国内新闻3  http://news.youth.cn/gn/index_3.htm
+中国青年网-国内新闻4  http://news.youth.cn/gn/index_4.htm
+#百度      https://www.baidu.com
+#qq      https://www.qq.com

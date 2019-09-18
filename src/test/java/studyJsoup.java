@@ -28,6 +28,15 @@ public class studyJsoup
             e.printStackTrace();
         }
         Document doc = Jsoup.parse(readFileToString);
+
+        Elements meta = doc.getElementsByTag("meta");
+        for (Element element : meta) {
+            String content = element.attr("content");
+            System.out.println(content);
+        }
+
+
+
         //获取title 内容
        /* Elements titleList = doc.getElementsByTag("title");
         Element title = titleList.first();
@@ -39,20 +48,25 @@ public class studyJsoup
 
         System.out.println(wypl.outerHtml());*/
 ////////////////////////////////////////////////////
-        Elements tj3_1 = doc.getElementsByClass("tj3_1");
+       /* Elements tj3_1 = doc.getElementsByClass("tj3_1");
         Element first = tj3_1.first();
 
         //System.out.println(first);
-        Elements elementsByTag = first.getElementsByTag("li");
-        System.out.println(elementsByTag);
-        for (Element element : elementsByTag) {
+        Elements elementsByTag = first.getElementsByTag("li");*/
+
+/*
+        Elements elementsByTag = doc.select("#sd>#q>font");
+
+
+        System.out.println(elementsByTag);*/
+       /* for (Element element : elementsByTag) {
             String time = element.getElementsByTag("font").text();
             //System.out.println(time);
             String title = element.getElementsByTag("a").text();
 
             String url = element.getElementsByTag("a").attr("href");
             System.out.println(time+"****"+title+"---------"+url);
-        }
+        }*/
 
     }
 }

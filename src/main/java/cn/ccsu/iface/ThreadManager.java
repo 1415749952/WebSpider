@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface ThreadManager
 {
-    public void createThread();
+    public void startThread();
     public int getActiveThreads();
     public int getInitThreads();
     public void stopAllThreads();
